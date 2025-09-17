@@ -7,22 +7,28 @@ on:
 jobs:
   test-lint: # job 이름(이름 수정 가능)
     runs-on: ubuntu-24.04
-    env:
-      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
     steps:
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Checkout # github -> ubuntu로 코드 가져오기 (로컬이 아니기때문에 가져와야함)
         uses: actions/checkout@v2
-      - name: Test
-        run: docker compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test"
-      - name: Lint
-        run: docker compose run --rm app sh -c "flake8 --config=app/.flake8"
 
-        
+      - name: Create .env file
+        run: |
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> drf_api/.env
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> drf_api/.env
+          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> drf_api/.env
+          echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> drf_api/.env
+          echo "DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1" >> drf_api/.env
+          echo "DEBUG=1" >> drf_api/.env
+
+      - name: Test
+        run: docker compose run --rm app sh -c "python manage.py test"
+
+      - name: Lint
+        run: docker compose run --rm app sh -c "flake8 --config=/app/.flake8"
+      
