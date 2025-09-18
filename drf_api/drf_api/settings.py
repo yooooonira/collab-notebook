@@ -22,6 +22,7 @@ SUPABASE_JWT_SECRET = os.environ.get("SUPABASE_JWT_SECRET")
 
 # --- 앱 목록 ---
 INSTALLED_APPS = [
+    "corsheaders",
     "django_extensions",
     "user",
     "folder",
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware", 
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -62,6 +64,8 @@ TEMPLATES = [
         },
     },
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 WSGI_APPLICATION = "drf_api.wsgi.application"
 
