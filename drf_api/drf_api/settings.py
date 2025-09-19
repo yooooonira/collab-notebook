@@ -22,6 +22,7 @@ SUPABASE_JWT_SECRET = os.environ.get("SUPABASE_JWT_SECRET")
 
 # --- 앱 목록 ---
 INSTALLED_APPS = [
+    "rest_framework",
     "corsheaders",
     "django_extensions",
     "user",
