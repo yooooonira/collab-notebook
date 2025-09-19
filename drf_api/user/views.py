@@ -51,3 +51,10 @@ class Search(ListAPIView): #이메일 기반 검색 (권한줄때 필요)
     def get_queryset(self):
         email = self.request.query_params.get("email")
         return UserProfile.objects.filter(email__icontains=email)
+
+class AvailableUserList(ListAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return UserProfile.objects.exclude(pk=self.request.user.pk)
