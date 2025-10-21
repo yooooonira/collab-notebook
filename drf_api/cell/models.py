@@ -3,7 +3,7 @@ from file.models import File
 
 class Cell(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE, related_name="cells")
-    content = models.TextField()  # 입력 코드/내용
+    content = models.TextField(blank=True, default='') # 입력 코드/내용
     output = models.TextField(null=True, blank=True)  # 실행 결과 저장
 
     def __str__(self):

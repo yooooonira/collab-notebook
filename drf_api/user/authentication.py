@@ -52,7 +52,7 @@ class SupabaseAuthentication(BaseAuthentication):
                 secret,
                 algorithms=["HS256"],
                 audience=self.audience,
-                issuer=f"{supabase_url}/auth/v1",
+                issuer=supabase_url, 
                 leeway=self.leeway_seconds,
             )
         except jwt.ExpiredSignatureError:

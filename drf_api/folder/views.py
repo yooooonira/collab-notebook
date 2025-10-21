@@ -46,7 +46,15 @@ class FolderFileListCreateView(generics.ListCreateAPIView):  #폴더기준 파�
 
     def perform_create(self, serializer):
         folder_id = self.kwargs["pk"]
-        role = self.request.user.role
+        user = self.request.user
+        
+        # UserProfile 가져오기
+        from user.models import UserProfile
+        try:
+            profile = UserProfile.objects.get(email=user.email)
+            role = profile.role
+        except UserProfile.DoesNotExist:
+            raise PermissionDenied("User profile not found")
 
         file_type = self.request.data.get("file_type")
         if role == "teacher" and file_type not in ["교재용", "학습용"]:
@@ -56,5 +64,5 @@ class FolderFileListCreateView(generics.ListCreateAPIView):  #폴더기준 파�
 
         serializer.save(
             folder_id=folder_id,
-            owner=self.request.user
+            owner=profile  # user 대신 profile
         )
