@@ -23,4 +23,5 @@ urlpatterns = [
     path("api/folders/", include("folder.urls")),
     path("api/files/", include("file.urls")),
     path("api/cells/", include("cell.urls")),
+    path("", include("django_prometheus.urls")), 
 ]

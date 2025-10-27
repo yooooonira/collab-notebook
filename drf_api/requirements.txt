@@ -7,3 +7,4 @@ PyJWT==2.9.0
 django-cors-headers==4.6.0 
 django-extensions
 requests
+django-prometheus>=2.3.1
